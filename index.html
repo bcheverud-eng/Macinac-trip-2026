@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Michigan &amp; Mackinac Family Trip | August 1–7, 2026</title>
+<style>
+:root {
+  --ink:#17324d; --muted:#667789; --bg:#edf3f6; --panel:#ffffff; --line:#d9e3e9;
+  --accent:#087e8b; --accent-soft:#e7f5f6; --meal:#b7791f; --meal-soft:#fff5df;
+  --hotel:#4b65a7; --hotel-soft:#eef1fb; --ferry:#6e5aa8; --ferry-soft:#f1eefb;
+  --activity:#2e7d55; --activity-soft:#eaf6ef; --free:#64748b; --free-soft:#f1f4f7;
+  --shadow:0 10px 30px rgba(23,50,77,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+.hero{background:linear-gradient(135deg,#17324d 0%,#087e8b 100%);color:#fff;padding:34px 20px 26px}
+.wrap{max-width:1080px;margin:auto}
+.hero h1{margin:0 0 8px;font-size:clamp(31px,5vw,50px);letter-spacing:-.03em}
+.hero p{margin:0;opacity:.9}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.summary div{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);padding:12px;border-radius:14px}
+.summary strong{display:block;font-size:20px}
+.summary span{font-size:13px;opacity:.9}
+.week-wrap{max-width:1080px;margin:18px auto 0;padding:0 20px}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.week-card{text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:11px;min-height:116px;cursor:pointer;color:var(--ink)}
+.week-card:hover{border-color:var(--accent)}
+.week-dow,.week-date{display:block;font-size:12px;color:var(--muted)}
+.week-card strong{display:block;font-size:14px;margin:8px 0 5px;line-height:1.25}
+.week-card small{color:var(--muted);line-height:1.25;display:block}
+.sticky{position:sticky;top:0;z-index:20;background:rgba(237,243,246,.96);backdrop-filter:blur(9px);border-bottom:1px solid var(--line);margin-top:18px}
+.controls{max-width:1080px;margin:auto;padding:10px 20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.day-tab,.control{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;color:var(--ink);cursor:pointer}
+.day-tab span,.day-tab strong{display:block;line-height:1.05}
+.day-tab span{font-size:11px;color:var(--muted)}
+.day-tab strong{font-size:13px;margin-top:3px}
+.day-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.day-tab.active span{color:rgba(255,255,255,.8)}
+.control{font-weight:700}
+main{max-width:1080px;margin:auto;padding:20px 20px 60px}
+.notice{background:#fff9ed;border-left:5px solid #c58b2a;padding:14px 16px;border-radius:11px;margin-bottom:18px;line-height:1.5}
+.day-view{display:none}
+.day-view.active{display:block}
+.day-title{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:17px}
+.day-title h2{margin:2px 0 4px;font-size:30px;letter-spacing:-.02em}
+.day-title p{margin:0;color:var(--muted)}
+.eyebrow{font-weight:800;color:var(--accent)!important;font-size:13px;letter-spacing:.08em}
+.hotel-chip{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:210px}
+.hotel-chip span{display:block;font-size:12px;color:var(--muted)}
+.hotel-chip strong{display:block;margin-top:3px;font-size:14px}
+.agenda{position:relative}
+.agenda:before{content:"";position:absolute;left:78px;top:0;bottom:0;width:1px;background:var(--line)}
+.event{display:grid;grid-template-columns:64px 1fr;gap:28px;position:relative;margin-bottom:12px}
+.event:before{content:"";position:absolute;left:73px;top:21px;width:11px;height:11px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);z-index:1}
+.event-time{font-weight:800;font-size:14px;padding-top:17px;text-align:right}
+.event-block{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:14px;padding:13px 15px;box-shadow:var(--shadow)}
+.event.meal .event-block{border-left-color:var(--meal)}
+.event.hotel .event-block{border-left-color:var(--hotel)}
+.event.ferry .event-block{border-left-color:var(--ferry)}
+.event.activity .event-block{border-left-color:var(--activity)}
+.event.free .event-block,.event.break .event-block{border-left-color:var(--free)}
+.event.reservation .event-block{border-left-color:#b83280}
+.event-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tag{font-size:12px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.meal .tag{background:var(--meal-soft);color:var(--meal)}
+.hotel .tag{background:var(--hotel-soft);color:var(--hotel)}
+.ferry .tag{background:var(--ferry-soft);color:var(--ferry)}
+.activity .tag{background:var(--activity-soft);color:var(--activity)}
+.free .tag,.break .tag{background:var(--free-soft);color:var(--free)}
+.reservation .tag{background:#fce7f3;color:#b83280}
+.done{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.done input{width:17px;height:17px;accent-color:var(--accent)}
+.event.complete .event-block{opacity:.62}
+.event.complete h3{text-decoration:line-through}
+.event-block h3{margin:7px 0 4px;font-size:19px}
+.event-block p{margin:7px 0;line-height:1.5}
+.address{color:var(--muted);font-size:13px;margin-top:0!important}
+.event-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.event-actions a{text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-size:12px;font-weight:800;background:#fff}
+.event-actions a:hover{border-color:var(--accent);color:var(--accent)}
+.sources{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px}
+.sources h3{margin:0 0 10px;font-size:16px}
+.source-links{display:flex;gap:8px;flex-wrap:wrap}
+.source-links a{font-size:12px;border:1px solid var(--line);padding:7px 9px;border-radius:8px;text-decoration:none}
+.disclaimer{color:var(--muted);font-size:12px;line-height:1.5;margin-top:14px}
+@media(max-width:900px){.week-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .week-grid{grid-template-columns:repeat(2,1fr)}
+  .day-title{align-items:flex-start;flex-direction:column}
+  .hotel-chip{width:100%}
+  .agenda:before{left:59px}
+  .event{grid-template-columns:48px 1fr;gap:22px}
+  .event:before{left:54px}
+  .event-time{font-size:12px}
+}
+@media print{
+  body{background:#fff} .hero{background:#fff;color:var(--ink);padding:10px 0}
+  .sticky,.week-wrap,.event-actions,.done{display:none!important}
+  main{padding:0} .day-view{display:block!important;page-break-before:always}
+  .day-view:first-of-type{page-break-before:auto}
+  .event-block{box-shadow:none;break-inside:avoid}
+}
+
+.badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.priority{font-size:11px;font-weight:900;padding:4px 8px;border-radius:999px}
+.priority.must-do{background:#e8f3ff;color:#235a92}
+.priority.flexible{background:#f3f4f6;color:#596579}
+.priority.skip-first{background:#fff1f1;color:#a23b3b}
+@media(max-width:520px){
+  .event-head{align-items:flex-start}
+  .done{padding-top:3px}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<h1>Michigan &amp; Mackinac Family Trip</h1>
+<p>August 1–7, 2026 · 11 travelers · 4 young children</p>
+<div class="summary">
+<div><strong>7 days</strong><span>Chicago to Mackinac and home</span></div>
+<div><strong>3 island nights</strong><span>Grand Hotel, August 3–6</span></div>
+<div><strong>1 slow day</strong><span>Cabana and pool on August 5</span></div>
+<div><strong>1 overnight home</strong><span>Simple hotel with an indoor pool</span></div>
+</div>
+</div>
+</header>
+<div class="week-wrap">
+<div class="week-grid"><button class="week-card" data-jump="sat" type="button">
+<span class="week-dow">SAT</span>
+<span class="week-date">AUG 1</span>
+<strong>Chicago to Traverse City</strong>
+<small>Baymont by Wyndham Traverse City</small>
+</button>
+<button class="week-card" data-jump="sun" type="button">
+<span class="week-dow">SUN</span>
+<span class="week-date">AUG 2</span>
+<strong>Sleeping Bear to Mackinaw City</strong>
+<small>Hamilton Inn Select Beachfront</small>
+</button>
+<button class="week-card" data-jump="mon" type="button">
+<span class="week-dow">MON</span>
+<span class="week-date">AUG 3</span>
+<strong>Arrive on Mackinac Island</strong>
+<small>Grand Hotel</small>
+</button>
+<button class="week-card" data-jump="tue" type="button">
+<span class="week-dow">TUE</span>
+<span class="week-date">AUG 4</span>
+<strong>Carriage Tour + Family Photos</strong>
+<small>Grand Hotel</small>
+</button>
+<button class="week-card" data-jump="wed" type="button">
+<span class="week-dow">WED</span>
+<span class="week-date">AUG 5</span>
+<strong>Cabana + Pool Day</strong>
+<small>Grand Hotel</small>
+</button>
+<button class="week-card" data-jump="thu" type="button">
+<span class="week-dow">THU</span>
+<span class="week-date">AUG 6</span>
+<strong>Mackinac to Green Bay</strong>
+<small>Hilton Garden Inn Green Bay</small>
+</button>
+<button class="week-card" data-jump="fri" type="button">
+<span class="week-dow">FRI</span>
+<span class="week-date">AUG 7</span>
+<strong>Green Bay to Wilmette</strong>
+<small>Home</small>
+</button></div>
+</div>
+<div class="sticky">
+<div class="controls">
+<button class="day-tab active" data-day="sat" type="button"><span>SAT</span><strong>AUG 1</strong></button>
+<button class="day-tab" data-day="sun" type="button"><span>SUN</span><strong>AUG 2</strong></button>
+<button class="day-tab" data-day="mon" type="button"><span>MON</span><strong>AUG 3</strong></button>
+<button class="day-tab" data-day="tue" type="button"><span>TUE</span><strong>AUG 4</strong></button>
+<button class="day-tab" data-day="wed" type="button"><span>WED</span><strong>AUG 5</strong></button>
+<button class="day-tab" data-day="thu" type="button"><span>THU</span><strong>AUG 6</strong></button>
+<button class="day-tab" data-day="fri" type="button"><span>FRI</span><strong>AUG 7</strong></button>
+<button class="control" id="showAll" type="button">Show full week</button>
+<button class="control" id="printBtn" type="button">Print / Save PDF</button>
+<button class="control" id="resetBtn" type="button">Reset checklist</button>
+</div>
+</div>
+<main>
+<div class="notice">Pacing principle: meal stops now receive a realistic 90-minute window for 11 travelers and four young children. Driving-day food is intentionally simple and predictable. Each event is labeled Must do, Flexible, or Skip first so the family can adjust without feeling behind.</div>
+<section class="day-view active" id="sat">
+<div class="day-title">
+<div>
+<p class="eyebrow">SAT · AUG 1</p>
+<h2>Chicago to Traverse City</h2>
+<p>Family-history stops in Muskegon</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Baymont by Wyndham Traverse City</strong></div>
+</div>
+<div class="agenda">
+<article class="event drive" data-key="sat-0">
+<div class="event-time">8:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Drive</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Depart Edgewater Beach</h3>
+<p class="address">Edgewater Beach, Chicago, IL</p>
+<p>Leave at 8:00 a.m. Central with a full tank, breakfast finished, and snacks ready.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Edgewater+Beach%2C+Chicago%2C+IL&amp;destination=Michigan+City%2C+IN&amp;travelmode=driving" rel="noopener" target="_blank">Start navigation</a></div>
+</div>
+</article>
+<article class="event break" data-key="sat-1">
+<div class="event-time">9:45–10:10 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Break</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Gas + restroom break</h3>
+<p class="address">Michigan City / New Buffalo area</p>
+<p>Plan 25 minutes. The itinerary switches to Eastern Time after entering Michigan.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=gas+station+Michigan+City+IN" rel="noopener" target="_blank">Find nearby stops</a></div>
+</div>
+</article>
+<article class="event meal" data-key="sat-2">
+<div class="event-time">12:15–1:45 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Quick lunch in Muskegon</h3>
+<p class="address">Chick-fil-A, Culver’s, Panera, or similar near the route</p>
+<p>Keep the road-trip lunch predictable and light. The 90-minute block covers parking, ordering, bathrooms, eating, and loading 11 people without putting the family-history stops behind schedule.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=Chick-fil-A+Muskegon+MI" rel="noopener" target="_blank">Find Chick-fil-A</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Culver%27s+Muskegon+MI" rel="noopener" target="_blank">Find Culver’s</a><a href="https://www.google.com/maps/search/?api=1&amp;query=quick+light+lunch+Muskegon+MI" rel="noopener" target="_blank">Find light fare</a></div>
+</div>
+</article>
+<article class="event activity" data-key="sat-3">
+<div class="event-time">1:55–2:15 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>St. Mary’s Cemetery</h3>
+<p class="address">1915 Park St, Muskegon, MI</p>
+<p>Allow about 20 minutes.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=1915+Park+St%2C+Muskegon%2C+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event activity" data-key="sat-4">
+<div class="event-time">2:25–2:50 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>St. Mary’s Church</h3>
+<p class="address">239 W Clay Ave, Muskegon, MI</p>
+<p>Allow about 20–25 minutes.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=239+W+Clay+Ave%2C+Muskegon%2C+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event activity" data-key="sat-5">
+<div class="event-time">3:00–3:25 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Gran’s House</h3>
+<p class="address">394 Houston Ave, Muskegon, MI</p>
+<p>Brief family stop and photos.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=394+Houston+Ave%2C+Muskegon%2C+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event activity" data-key="sat-6">
+<div class="event-time">3:35–4:05 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Muskegon Beach</h3>
+<p class="address">Muskegon Beach, Muskegon, MI</p>
+<p>Thirty-minute shoreline stop. The kids can get their feet in the water; Sunday is the main beach day. Parking is approximately $15 per vehicle.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=Muskegon+Beach%2C+Muskegon%2C+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event meal" data-key="sat-7">
+<div class="event-time">6:30–8:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Dinner: The Cherry Hut</h3>
+<p class="address">211 N Michigan Ave, Beulah, MI 49617</p>
+<p>A northern Michigan tradition. Split into smaller tables if that reduces the wait.</p>
+<div class="event-actions"><a href="https://cherryhut.com/pages/the-cherry-hut-restaurant" rel="noopener" target="_blank">Website</a><a href="tel:+12318824431" rel="noopener" target="_blank">Call</a><a href="https://www.google.com/maps/search/?api=1&amp;query=211+N+Michigan+Ave%2C+Beulah%2C+MI+49617" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event hotel" data-key="sat-8">
+<div class="event-time">8:45 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Check in</h3>
+<p class="address">2326 N US-31 S, Traverse City, MI 49684</p>
+<p>Baymont confirmation: 522083993D.</p>
+<div class="event-actions"><a href="https://www.wyndhamhotels.com/baymont/traverse-city-michigan/baymont-inn-and-suites-traverse-city/overview" rel="noopener" target="_blank">Hotel</a><a href="https://www.google.com/maps/search/?api=1&amp;query=2326+N+US-31+S%2C+Traverse+City%2C+MI+49684" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+</div>
+</section>
+<section class="day-view" id="sun">
+<div class="day-title">
+<div>
+<p class="eyebrow">SUN · AUG 2</p>
+<h2>Sleeping Bear to Mackinaw City</h2>
+<p>Beach morning, then a relaxed northbound afternoon</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Hamilton Inn Select Beachfront</strong></div>
+</div>
+<div class="agenda">
+<article class="event hotel" data-key="sun-0">
+<div class="event-time">7:00–8:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Breakfast, pack + checkout</h3>
+<p class="address">Baymont by Wyndham Traverse City</p>
+<p>Load the car before departure so the group can leave at 8:00 a.m.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event activity" data-key="sun-1">
+<div class="event-time">8:45 AM–12:15 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Sleeping Bear Dunes</h3>
+<p class="address">Sleeping Bear Dunes National Lakeshore</p>
+<p>Primary beach time for the trip. Focus on swimming, sand, and one scenic overlook rather than trying to cover the entire park.</p>
+<div class="event-actions"><a href="https://www.nps.gov/slbe/index.htm" rel="noopener" target="_blank">NPS website</a><a href="https://www.nps.gov/slbe/planyourvisit/fees.htm" rel="noopener" target="_blank">Fees</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Sleeping+Bear+Dunes+National+Lakeshore" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event meal" data-key="sun-2">
+<div class="event-time">12:30–2:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Lunch: Art’s Tavern</h3>
+<p class="address">6487 Western Ave, Glen Arbor, MI 49636</p>
+<p>Casual family lunch before the northbound drive. Recheck same-day hours and wait time.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=Art%27s+Tavern+Glen+Arbor+MI" rel="noopener" target="_blank">Map + hours</a></div>
+</div>
+</article>
+<article class="event break" data-key="sun-3">
+<div class="event-time">3:45–4:05 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Break</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Optional Petoskey waterfront break</h3>
+<p class="address">Petoskey Waterfront, Petoskey, MI</p>
+<p>Keep this to about 20 minutes and skip it if the beach or lunch runs long.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=Petoskey+Waterfront+Petoskey+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event activity" data-key="sun-4">
+<div class="event-time">5:00–6:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Colonial Michilimackinac</h3>
+<p class="address">102 W Straits Ave, Mackinaw City, MI 49701</p>
+<p>A focused visit rather than trying to see every exhibit.</p>
+<div class="event-actions"><a href="https://www.mackinacparks.com/attraction/colonial-michilimackinac/" rel="noopener" target="_blank">Official site</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Colonial+Michilimackinac" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event hotel" data-key="sun-5">
+<div class="event-time">6:10 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Check in</h3>
+<p class="address">701 S Huron Ave, Mackinaw City, MI 49701</p>
+<p>Hamilton Inn confirmation: CF1783367797.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=701+S+Huron+Ave+Mackinaw+City+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event meal" data-key="sun-6">
+<div class="event-time">6:20–7:50 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Dinner: Darrow’s</h3>
+<p class="address">301 Louvigny St, Mackinaw City, MI 49701</p>
+<p>Straightforward early family dinner. Call ahead for 11.</p>
+<div class="event-actions"><a href="https://www.darrowsrestaurant.com/" rel="noopener" target="_blank">Website</a><a href="tel:+12314365514" rel="noopener" target="_blank">Call</a><a href="https://www.google.com/maps/search/?api=1&amp;query=301+Louvigny+St+Mackinaw+City+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event activity" data-key="sun-7">
+<div class="event-time">7:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Optional Headlands sunset stop</h3>
+<p class="address">15675 Headlands Rd, Mackinaw City, MI 49701</p>
+<p>Skip without hesitation if everyone needs downtime. This would be a sunset visit, not late-night stargazing.</p>
+<div class="event-actions"><a href="https://www.emmetcounty.org/experiences/headlands/index.php" rel="noopener" target="_blank">Official site</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Headlands+International+Dark+Sky+Park" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+</div>
+</section>
+<section class="day-view" id="mon">
+<div class="day-title">
+<div>
+<p class="eyebrow">MON · AUG 3</p>
+<h2>Arrive on Mackinac Island</h2>
+<p>Lunch on the island with a deliberately easy afternoon</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Grand Hotel</strong></div>
+</div>
+<div class="agenda">
+<article class="event hotel" data-key="mon-0">
+<div class="event-time">7:30–9:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Breakfast + checkout</h3>
+<p class="address">Hamilton Inn Select Beachfront</p>
+<p>Pack a day bag containing medications, children’s essentials, and anything needed before checked luggage reaches the room.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event ferry" data-key="mon-1">
+<div class="event-time">9:15–10:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Ferry</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Arrive at St. Ignace Classic Dock</h3>
+<p class="address">99 N State St, St. Ignace, MI 49781</p>
+<p>Park on the UP side so the car is positioned for the trip home. Arrive 45 minutes before departure and tag luggage through to Grand Hotel.</p>
+<div class="event-actions"><a href="https://www.arnoldtransitcompany.com/summer-parking/" rel="noopener" target="_blank">Parking information</a><a href="https://www.google.com/maps/search/?api=1&amp;query=99+N+State+St+St+Ignace+MI" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event ferry" data-key="mon-2">
+<div class="event-time">10:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Ferry</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Classic ferry to Mackinac Island</h3>
+<p class="address">St. Ignace → Mackinac Island</p>
+<p>The classic ferry takes approximately 30–40 minutes. Tickets are not tied to a specific departure.</p>
+<div class="event-actions"><a href="https://www.arnoldtransitcompany.com/summer-schedule/" rel="noopener" target="_blank">2026 schedule</a><a href="https://www.arnoldtransitcompany.com/" rel="noopener" target="_blank">Tickets</a></div>
+</div>
+</article>
+<article class="event meal" data-key="mon-3">
+<div class="event-time">11:15 AM–12:45 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Lunch downtown</h3>
+<p class="address">Downtown Mackinac Island</p>
+<p>Choose a casual option close to the docks. Keep the exact restaurant flexible based on arrival and seating.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=family+lunch+downtown+Mackinac+Island" rel="noopener" target="_blank">Dining map</a></div>
+</div>
+</article>
+<article class="event hotel" data-key="mon-4">
+<div class="event-time">12:45 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Grand Hotel arrival + gardens</h3>
+<p class="address">286 Grand Ave, Mackinac Island, MI 49757</p>
+<p>Complete check-in formalities, enjoy the porch and gardens, and settle into island pace. Rooms are officially available after 4:00 p.m. The walk from the docks is about 15–20 minutes; horse-drawn taxi service is cash only.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/our-story/policies-information/" rel="noopener" target="_blank">Hotel policies</a><a href="https://www.grandhotel.com/activities/interactive-map/" rel="noopener" target="_blank">Interactive map</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Grand+Hotel+Mackinac+Island" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event activity" data-key="mon-5">
+<div class="event-time">4:00–5:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Optional mini golf</h3>
+<p class="address">The Gem at Woodlands Activity Center</p>
+<p>Easy first-day activity if the kids still have energy. This can also be repeated later in the stay.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/activities/woodlands-activity-center/" rel="noopener" target="_blank">Woodlands</a></div>
+</div>
+</article>
+<article class="event meal" data-key="mon-6">
+<div class="event-time">6:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Dinner: Main Dining Room</h3>
+<p class="address">Grand Hotel</p>
+<p>Your requested dinner time. Grand Hotel’s published standard dinner hours begin at 6:30 p.m., so confirm the 6:00 seating directly with the hotel. Evening dress requirements apply.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/dining/main-dining-room/" rel="noopener" target="_blank">Main Dining Room</a><a href="https://www.grandhotel.com/our-story/policies-information/" rel="noopener" target="_blank">Hotel policies</a></div>
+</div>
+</article>
+<article class="event free" data-key="mon-7">
+<div class="event-time">After dinner</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Open time</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Open evening</h3>
+<p class="address">Grand Hotel</p>
+<p>Porch time, music, ice cream, or an early night.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+</div>
+</section>
+<section class="day-view" id="tue">
+<div class="day-title">
+<div>
+<p class="eyebrow">TUE · AUG 4</p>
+<h2>Carriage Tour + Family Photos</h2>
+<p>The primary sightseeing day, with room to breathe</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Grand Hotel</strong></div>
+</div>
+<div class="agenda">
+<article class="event meal" data-key="tue-0">
+<div class="event-time">7:30–9:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Breakfast</h3>
+<p class="address">Grand Hotel Main Dining Room</p>
+<p>Unhurried breakfast.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/dining/main-dining-room/" rel="noopener" target="_blank">Dining</a></div>
+</div>
+</article>
+<article class="event activity" data-key="tue-1">
+<div class="event-time">10:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Recommended carriage tour</h3>
+<p class="address">Downtown Mackinac Island</p>
+<p>A narrated public carriage tour is the easiest way to see Surrey Hill, Arch Rock, and key island sights with young children. Confirm the boarding process the day before.</p>
+<div class="event-actions"><a href="https://www.mackinacisland.org/listing/mackinac-island-carriage-tours/27/" rel="noopener" target="_blank">Tour information</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Mackinac+Island+Carriage+Tours" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event meal" data-key="tue-2">
+<div class="event-time">12:15–1:45 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Lunch + downtown time</h3>
+<p class="address">Downtown Mackinac Island</p>
+<p>Casual lunch followed by fudge shops and browsing. Return to the hotel with plenty of time before photos.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=family+lunch+downtown+Mackinac+Island" rel="noopener" target="_blank">Dining map</a></div>
+</div>
+</article>
+<article class="event free" data-key="tue-3">
+<div class="event-time">2:30–4:15 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Open time</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Open afternoon</h3>
+<p class="address">Grand Hotel</p>
+<p>Rest, gardens, porch time, or a short round of mini golf. Avoid adding another major commitment.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event reservation" data-key="tue-4">
+<div class="event-time">5:00–5:55 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Reserved</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Family photo session</h3>
+<p class="address">Grand Hotel grounds</p>
+<p>CONFIRMED for 5:00–5:55 PM. Begin getting ready around 4:15 PM so the full group is assembled and relaxed before the photographer arrives.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/activities/gardens/" rel="noopener" target="_blank">Grand Hotel gardens</a></div>
+</div>
+</article>
+<article class="event meal" data-key="tue-5">
+<div class="event-time">6:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Dinner: The Jockey Club</h3>
+<p class="address">1874 Cadotte Ave, Mackinac Island, MI 49757</p>
+<p>Head directly to dinner after photos. Dinner service runs from 5:00–10:00 p.m. Confirm the reservation is held for the full group of 11.</p>
+<div class="event-actions"><a href="https://www.jockeyclubmackinac.com/" rel="noopener" target="_blank">Restaurant</a><a href="tel:+19068479212" rel="noopener" target="_blank">Call</a><a href="https://www.google.com/maps/search/?api=1&amp;query=The+Jockey+Club+Mackinac+Island" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event free" data-key="tue-6">
+<div class="event-time">After dinner</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Open time</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Open evening</h3>
+<p class="address">Grand Hotel / Woodlands</p>
+<p>Porch, music, ice cream, or mini golf if everyone still has energy.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+</div>
+</section>
+<section class="day-view" id="wed">
+<div class="day-title">
+<div>
+<p class="eyebrow">WED · AUG 5</p>
+<h2>Cabana + Pool Day</h2>
+<p>The intentionally slow day</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Grand Hotel</strong></div>
+</div>
+<div class="agenda">
+<article class="event meal" data-key="wed-0">
+<div class="event-time">7:30–9:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Breakfast</h3>
+<p class="address">Grand Hotel Main Dining Room</p>
+<p>No rush this morning.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event activity" data-key="wed-1">
+<div class="event-time">9:15–10:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Optional garden walk</h3>
+<p class="address">Grand Hotel gardens</p>
+<p>A low-effort walk before the pool opens.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/activities/gardens/" rel="noopener" target="_blank">Gardens</a></div>
+</div>
+</article>
+<article class="event reservation" data-key="wed-2">
+<div class="event-time">10:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Reserved</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Cabana + pool</h3>
+<p class="address">Esther Williams Swimming Pool</p>
+<p>Make this the centerpiece of the day. Keep lunch poolside or nearby and let the children set the pace. Reserve the cabana in advance.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/activities/esther-williams-swimming-pool/" rel="noopener" target="_blank">Pool + cabanas</a><a href="https://www.grandhotel.com/activities/bookable-experiences/" rel="noopener" target="_blank">Bookable experiences</a></div>
+</div>
+</article>
+<article class="event free" data-key="wed-3">
+<div class="event-time">4:30–5:30 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Open time</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Return to rooms</h3>
+<p class="address">Grand Hotel</p>
+<p>Allow a full hour for showers, rest, and getting four young children ready for dinner.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event meal" data-key="wed-4">
+<div class="event-time">6:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Dinner: Main Dining Room</h3>
+<p class="address">Grand Hotel</p>
+<p>Your requested dinner time. Confirm the 6:00 seating because published standard dinner hours begin at 6:30 p.m. Evening dress requirements apply.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/dining/main-dining-room/" rel="noopener" target="_blank">Main Dining Room</a></div>
+</div>
+</article>
+<article class="event free" data-key="wed-5">
+<div class="event-time">After dinner</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Open time</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Final island evening</h3>
+<p class="address">Grand Hotel</p>
+<p>Porch time, music, ice cream, or one final round of mini golf.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+</div>
+</section>
+<section class="day-view" id="thu">
+<div class="day-title">
+<div>
+<p class="eyebrow">THU · AUG 6</p>
+<h2>Mackinac to Green Bay</h2>
+<p>Early lunch, one scenic stop, and a comfortable overnight</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Hilton Garden Inn Green Bay</strong></div>
+</div>
+<div class="agenda">
+<article class="event meal" data-key="thu-0">
+<div class="event-time">7:30–9:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Breakfast + final stroll</h3>
+<p class="address">Grand Hotel</p>
+<p>Send checked luggage toward the St. Ignace dock early. Grand Hotel requests at least a three-hour transfer window. Keep valuables, medication, and children’s essentials in carry-ons.</p>
+<div class="event-actions"><a href="https://www.grandhotel.com/our-story/policies-information/" rel="noopener" target="_blank">Luggage policy</a></div>
+</div>
+</article>
+<article class="event hotel" data-key="thu-1">
+<div class="event-time">11:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Grand Hotel checkout</h3>
+<p class="address">286 Grand Ave, Mackinac Island, MI 49757</p>
+<p>Official checkout time. Rooms must be released, but there is no need to rush immediately off the island.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event ferry" data-key="thu-2">
+<div class="event-time">12:00 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Ferry</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Fast ferry to St. Ignace</h3>
+<p class="address">Mackinac Island → St. Ignace</p>
+<p>The fast ferry takes approximately 20 minutes. The 11:00 a.m. and 1:00 p.m. departures are backups if needed.</p>
+<div class="event-actions"><a href="https://www.arnoldtransitcompany.com/summer-schedule/" rel="noopener" target="_blank">2026 schedule</a></div>
+</div>
+</article>
+<article class="event drive" data-key="thu-3">
+<div class="event-time">12:25 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Drive</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Collect luggage + car</h3>
+<p class="address">St. Ignace Main Dock</p>
+<p>Organize the cars and head directly to lunch.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event meal" data-key="thu-4">
+<div class="event-time">12:45–2:15 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Quick lunch in St. Ignace</h3>
+<p class="address">Quick-service restaurant near US-2</p>
+<p>Choose McDonald’s, Subway, a deli, or another predictable light option near the route. The 90-minute block is intentional for four young kids and includes bathrooms and loading the cars.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=quick+service+restaurants+St+Ignace+MI" rel="noopener" target="_blank">Find quick food</a><a href="https://www.google.com/maps/search/?api=1&amp;query=light+lunch+St+Ignace+MI" rel="noopener" target="_blank">Find light fare</a></div>
+</div>
+</article>
+<article class="event activity" data-key="thu-5">
+<div class="event-time">3:00–3:20 PM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Cut River Bridge overlook</h3>
+<p class="address">US-2, Mackinac County, MI</p>
+<p>One scenic stop for about 15–20 minutes. Use the overlook and picnic area; skip the long stair descent unless everyone truly wants it.</p>
+<div class="event-actions"><a href="https://stignace.com/day-trips/" rel="noopener" target="_blank">Area information</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Cut+River+Bridge+roadside+park+Michigan" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event hotel" data-key="thu-6">
+<div class="event-time">6:15 PM CT</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Check in: Hilton Garden Inn</h3>
+<p class="address">1015 Lombardi Ave, Green Bay, WI 54304</p>
+<p>A comfortable, practical one-night hotel with an indoor pool, on-site restaurant, free parking, and a 3:00 p.m. check-in / 11:00 a.m. checkout. This is the right service level for the stop rather than a resort or waterpark.</p>
+<div class="event-actions"><a href="https://www.hilton.com/en/hotels/grbghgi-hilton-garden-inn-green-bay/" rel="noopener" target="_blank">Hotel website</a><a href="tel:+19204050400" rel="noopener" target="_blank">Call</a><a href="https://www.google.com/maps/search/?api=1&amp;query=1015+Lombardi+Ave+Green+Bay+WI+54304" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+<article class="event meal" data-key="thu-7">
+<div class="event-time">7:00–8:30 PM CT</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Meal</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Dinner near hotel</h3>
+<p class="address">Lambeau / Titletown area</p>
+<p>Use the hotel restaurant or choose something within a few minutes. Keep dinner easy after the long drive.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=family+restaurants+near+Hilton+Garden+Inn+Green+Bay" rel="noopener" target="_blank">Nearby dining</a></div>
+</div>
+</article>
+<article class="event activity" data-key="thu-8">
+<div class="event-time">After dinner</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Activity</span><span class="priority skip-first">Skip first</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Optional pool</h3>
+<p class="address">Hilton Garden Inn Green Bay</p>
+<p>A simple swim if the kids want it. Otherwise settle in and get an early night.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+</div>
+</section>
+<section class="day-view" id="fri">
+<div class="day-title">
+<div>
+<p class="eyebrow">FRI · AUG 7</p>
+<h2>Green Bay to Wilmette</h2>
+<p>Easy final drive home</p>
+</div>
+<div class="hotel-chip"><span>Overnight</span><strong>Home</strong></div>
+</div>
+<div class="agenda">
+<article class="event hotel" data-key="fri-0">
+<div class="event-time">7:30–9:00 AM</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Breakfast + checkout</h3>
+<p class="address">Hilton Garden Inn Green Bay</p>
+<p>Aim to leave around 9:00 a.m. The hotel’s official checkout is 11:00 a.m., so there is no pressure if the morning moves slowly.</p>
+<div class="event-actions"></div>
+</div>
+</article>
+<article class="event drive" data-key="fri-1">
+<div class="event-time">9:00 AM CT</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Drive</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Depart Green Bay</h3>
+<p class="address">1015 Lombardi Ave, Green Bay, WI 54304</p>
+<p>Approximately 3 hours 15 minutes to Wilmette before traffic and stops.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=1015+Lombardi+Ave+Green+Bay+WI+54304&amp;destination=Wilmette+IL&amp;travelmode=driving" rel="noopener" target="_blank">Navigate home</a></div>
+</div>
+</article>
+<article class="event break" data-key="fri-2">
+<div class="event-time">10:45–11:30 AM CT</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Break</span><span class="priority flexible">Flexible</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Optional quick food + restroom stop</h3>
+<p class="address">Sheboygan or north Milwaukee area</p>
+<p>Use a Chick-fil-A, Culver’s, Panera, or similar quick-service stop only if the group needs it. Otherwise continue home and eat after arrival.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=Culver%27s+Sheboygan+WI" rel="noopener" target="_blank">Find Culver’s</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Chick-fil-A+north+Milwaukee+WI" rel="noopener" target="_blank">Find Chick-fil-A</a><a href="https://www.google.com/maps/search/?api=1&amp;query=quick+light+food+Sheboygan+WI" rel="noopener" target="_blank">Find light fare</a></div>
+</div>
+</article>
+<article class="event hotel" data-key="fri-3">
+<div class="event-time">12:30–1:30 PM CT</div>
+<div class="event-block">
+<div class="event-head"><div class="badges"><span class="tag">Hotel</span><span class="priority must-do">Must do</span></div>
+
+<label class="done"><input type="checkbox"/> Done</label>
+</div>
+<h3>Arrive home</h3>
+<p class="address">Wilmette, IL</p>
+<p>Estimated arrival is 12:30–1:30 p.m. depending on breakfast, traffic, and whether the group stops.</p>
+<div class="event-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=Wilmette+IL" rel="noopener" target="_blank">Map</a></div>
+</div>
+</article>
+</div>
+</section>
+<div class="sources">
+<h3>Official planning links</h3>
+<div class="source-links"><a href="https://www.arnoldtransitcompany.com/summer-schedule/" rel="noopener" target="_blank">2026 Arnold Transit summer schedule</a><a href="https://www.arnoldtransitcompany.com/summer-parking/" rel="noopener" target="_blank">Arnold Transit parking</a><a href="https://www.grandhotel.com/our-story/policies-information/" rel="noopener" target="_blank">Grand Hotel policies and luggage</a><a href="https://www.grandhotel.com/dining/main-dining-room/" rel="noopener" target="_blank">Grand Hotel Main Dining Room</a><a href="https://www.grandhotel.com/dining-and-activity-opening-dates-and-hours-operation/" rel="noopener" target="_blank">Grand Hotel dining/activity hours</a><a href="https://www.hilton.com/en/hotels/grbghgi-hilton-garden-inn-green-bay/" rel="noopener" target="_blank">Hilton Garden Inn Green Bay</a></div>
+</div>
+<p class="disclaimer">Drive times are planning estimates and do not account for live traffic, construction, parking, boarding, weather, or additional child breaks. Ferry schedules and seasonal operating hours can change. Reconfirm the ferry, cabana, carriage tour, photo session, and dinner reservations shortly before departure.</p>
+</main>
+<script>
+const tabs=[...document.querySelectorAll('.day-tab')];
+const days=[...document.querySelectorAll('.day-view')];
+
+function showDay(id){
+  days.forEach(d=>d.classList.toggle('active',d.id===id));
+  tabs.forEach(t=>t.classList.toggle('active',t.dataset.day===id));
+  window.scrollTo({top:document.querySelector('main').offsetTop-70,behavior:'smooth'});
+}
+tabs.forEach(t=>t.addEventListener('click',()=>showDay(t.dataset.day)));
+document.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>showDay(b.dataset.jump)));
+
+document.getElementById('showAll').addEventListener('click',()=>{
+  days.forEach(d=>d.classList.add('active'));
+  tabs.forEach(t=>t.classList.remove('active'));
+  window.scrollTo({top:document.querySelector('main').offsetTop-70,behavior:'smooth'});
+});
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+
+document.querySelectorAll('.event').forEach(ev=>{
+  const cb=ev.querySelector('input[type=checkbox]');
+  const key='trip-'+ev.dataset.key;
+  cb.checked=localStorage.getItem(key)==='1';
+  ev.classList.toggle('complete',cb.checked);
+  cb.addEventListener('change',()=>{
+    localStorage.setItem(key,cb.checked?'1':'0');
+    ev.classList.toggle('complete',cb.checked);
+  });
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  document.querySelectorAll('.event').forEach(ev=>{
+    const cb=ev.querySelector('input[type=checkbox]');
+    cb.checked=false; ev.classList.remove('complete');
+    localStorage.removeItem('trip-'+ev.dataset.key);
+  });
+});
+</script>
+</body>
+</html>
